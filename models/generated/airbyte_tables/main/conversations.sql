@@ -1,22 +1,10 @@
 {{ config(schema="main", tags=["top-level"]) }}
 -- Final base SQL model
 select
+    'intercom' as source,
     id,
-    body,
-    type,
-    author,
-    redacted,
-    part_type,
     created_at,
-    updated_at,
-    assigned_to,
-    attachments,
-    external_id,
-    notified_at,
-    conversation_id,
-    conversation_created_at,
-    conversation_updated_at,
-    conversation_total_parts,
+    conversation_id as ticket_id,
     _airbyte_emitted_at,
     _airbyte_intercom_conversation_parts_hashid
 from {{ ref('intercom_conversation_parts_ab3') }}
