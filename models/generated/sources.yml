@@ -1,0 +1,10 @@
+version: 2
+sources:
+- name: main
+  quoting:
+    database: true
+    schema: false
+    identifier: false
+  tables:
+  - name: _airbyte_raw_intercom_conversation_parts
+  - name: _airbyte_raw_intercom_conversations
