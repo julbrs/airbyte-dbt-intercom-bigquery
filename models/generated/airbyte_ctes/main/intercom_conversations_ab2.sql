@@ -1,6 +1,7 @@
 {{ config(schema="_airbyte_main", tags=["top-level-intermediate"]) }}
 -- SQL model to cast each column to its adequate SQL type converted from the JSON schema type
 select
+    'intercom' as source,
     cast(id as {{ dbt_utils.type_string() }}) as id,
     {{ cast_to_boolean('open') }} as open,
     {{ cast_to_boolean('read') }} as read,
@@ -9,7 +10,6 @@ select
     cast(user as {{ type_json() }}) as user,
     cast(state as {{ dbt_utils.type_string() }}) as state,
     cast(title as {{ dbt_utils.type_string() }}) as title,
-    cast(source as {{ type_json() }}) as source,
     cast(sent_at as {{ dbt_utils.type_bigint() }}) as sent_at,
     cast(assignee as {{ type_json() }}) as assignee,
     cast(contacts as {{ type_json() }}) as contacts,

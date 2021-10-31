@@ -7,13 +7,17 @@
     ) }}
 -- Final base SQL model
 select
-    'intercom' as source,
-    id,
-    state as status,
-    TIMESTAMP_MILLIS(created_at) as created_at,
-    TIMESTAMP_MILLIS(updated_at) as updated_at,
-    _airbyte_emitted_at,
-    _airbyte_intercom_conversations_hashid as _airbyte_hashid
-from {{ ref('intercom_conversations_ab3') }}
+    c.source,
+    c.id,
+    c.state as status,
+    TIMESTAMP_MILLIS(c.created_at) as created_at,
+    TIMESTAMP_MILLIS(c.updated_at) as updated_at,
+    s.count_conversation_parts as count_conversation_parts,
+    datetime_diff(TIMESTAMP_MILLIS(s.first_admin_reply_at), TIMESTAMP_MILLIS(c.updated_at), MINUTE) as first_response_time_min,
+    datetime_diff(TIMESTAMP_MILLIS(s.last_admin_reply_at), TIMESTAMP_MILLIS(c.updated_at), MINUTE) as total_response_time_min,
+    c._airbyte_emitted_at,
+    c._airbyte_intercom_conversations_hashid as _airbyte_hashid
+from {{ ref('intercom_conversations_ab3') }} c
+join {{ ref('intercom_conversations_statistics_ab2') }} s using (_airbyte_intercom_conversations_hashid)
 -- intercom_conversations from {{ source('main', '_airbyte_raw_intercom_conversations') }}
 
